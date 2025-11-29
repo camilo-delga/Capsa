@@ -1,0 +1,10 @@
+# ============================================
+# DEPENDENCIAS NECESARIAS
+# ============================================
+
+# Instalar todas las dependencias con UN solo comando:
+npm install @supabase/supabase-js @aws-sdk/client-s3
+
+# Desglose:
+# - @supabase/supabase-js → Cliente de Supabase para Next.js
+# - @aws-sdk/client-s3 → SDK de AWS S3 (compatible con Cloudflare R2)
