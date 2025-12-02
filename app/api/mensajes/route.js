@@ -1,16 +1,11 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-// GET - Obtener mensajes
 export async function GET(request) {
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
+    const supabase = supabaseServer();
     const { searchParams } = new URL(request.url);
     const usuario_id = searchParams.get("usuario_id");
 
@@ -19,7 +14,6 @@ export async function GET(request) {
       .select("*")
       .order("creado_en", { ascending: true });
 
-    // Filtrar mensajes donde el usuario sea emisor o receptor
     if (usuario_id) {
       query = query.or(`emisor.eq.${usuario_id},receptor.eq.${usuario_id}`);
     }
@@ -38,14 +32,9 @@ export async function GET(request) {
   }
 }
 
-// POST - Enviar nuevo mensaje
 export async function POST(request) {
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
+    const supabase = supabaseServer();
     const body = await request.json();
     const { emisor, receptor, contenido } = body;
 

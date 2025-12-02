@@ -1,16 +1,11 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-// GET - Obtener todas las tareas
 export async function GET(request) {
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
+    const supabase = supabaseServer();
     const { searchParams } = new URL(request.url);
     const materia_id = searchParams.get("materia_id");
 
@@ -19,7 +14,6 @@ export async function GET(request) {
       .select("*")
       .order("fecha_limite", { ascending: true });
 
-    // Filtrar por materia si se proporciona
     if (materia_id) {
       query = query.eq("materia_id", materia_id);
     }
@@ -38,14 +32,9 @@ export async function GET(request) {
   }
 }
 
-// POST - Crear nueva tarea
 export async function POST(request) {
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
+    const supabase = supabaseServer();
     const body = await request.json();
     const { materia_id, titulo, descripcion, fecha_limite, archivo_url } = body;
 

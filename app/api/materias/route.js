@@ -1,18 +1,15 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseServer } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-
+  const supabase = supabaseServer();
   const { data, error } = await supabase.from("materias").select("*");
 
   if (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return Response.json({ data });
+  return NextResponse.json({ data });
 }
